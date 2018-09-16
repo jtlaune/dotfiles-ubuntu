@@ -21,7 +21,7 @@
     ("ccaaf462e6fe97801f712ea3cee7cbbc4208472fc75e008eab13276c17c87302" "4515feff287a98863b7b7f762197a78a7c2bfb6ec93879e7284dff184419268c" default)))
  '(package-selected-packages
    (quote
-    (spaceline auctex magit helm-projectile eterm-256color ace-window better-defaults evil ##)))
+    (pdf-tools auctex-latexmk spaceline auctex magit helm-projectile eterm-256color ace-window better-defaults evil ##)))
  '(window-divider-default-right-width 10))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -29,6 +29,9 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;; central save files
+(setq backup-directory-alist `(("." . "~/.saves")))
 
 ;; Fuck outta here with those bars
 (menu-bar-mode -1)
@@ -98,11 +101,30 @@
 (use-package magit
   :ensure t)
 
+(use-package pdf-tools
+  :ensure t)
+(pdf-tools-install)
+(setq pdf-tools-enable 1)
+
+
 (use-package tex
   :ensure auctex)
+(setq TeX-view-program-selection '((output-pdf "PDF Tools")))
+(setq TeX-source-correlate-method
+      '((dvi . source-specials)
+       (pdf . synctex)))
+(setq TeX-source-correlate-mode t)
 (setq TeX-auto-save t)
+(setq TeX-PDF-mode t)
 (setq TeX-parse-self t)
+(setq-default TeX-source-correlate-start-server t)
+(add-hook 'TeX-after-compilation-finished-functions
+           #'TeX-revert-document-buffer)
 (global-font-lock-mode 1)
+
+(use-package auctex-latexmk
+  :ensure t)
+(auctex-latexmk-setup)
 
 (use-package spaceline
   :ensure t
