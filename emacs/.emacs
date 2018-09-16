@@ -21,7 +21,7 @@
     ("ccaaf462e6fe97801f712ea3cee7cbbc4208472fc75e008eab13276c17c87302" "4515feff287a98863b7b7f762197a78a7c2bfb6ec93879e7284dff184419268c" default)))
  '(package-selected-packages
    (quote
-    (magit helm-projectile eterm-256color ace-window better-defaults evil ##)))
+    (spaceline auctex magit helm-projectile eterm-256color ace-window better-defaults evil ##)))
  '(window-divider-default-right-width 10))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -59,6 +59,8 @@
 
 ;; keybindings
 (global-set-key (kbd "M-o") 'ace-window)
+(global-set-key (kbd "M-r") 'isearch-backward-regexp)
+(global-set-key (kbd "M-s") 'isearch-forward-regexp)
 
 ;; use-package
 (unless (package-installed-p 'use-package)
@@ -95,3 +97,20 @@
 
 (use-package magit
   :ensure t)
+
+(use-package tex
+  :ensure auctex)
+(setq TeX-auto-save t)
+(setq TeX-parse-self t)
+(global-font-lock-mode 1)
+
+(use-package spaceline
+  :ensure t
+  :config
+  (setq-default mode-line-format '("%e" (:eval (spaceline-ml-main)))))
+
+(use-package spaceline-config
+  :ensure spaceline
+  :config
+  (spaceline-helm-mode 1)
+  (spaceline-emacs-theme))
