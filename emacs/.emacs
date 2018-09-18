@@ -85,6 +85,7 @@
 (use-package evil
   :ensure t)
 (evil-mode t)
+(add-to-list 'evil-emacs-state-modes 'image-mode)
 
 (use-package ace-window
   :ensure t)
@@ -109,6 +110,7 @@
 
 (use-package magit
   :ensure t)
+(global-set-key (kbd "C-x g") 'magit-status)
 
 (use-package pdf-tools
   :ensure t)
