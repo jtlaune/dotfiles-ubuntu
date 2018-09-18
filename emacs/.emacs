@@ -13,6 +13,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(TeX-PDF-mode t)
  '(ansi-color-names-vector
    ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
  '(custom-enabled-themes (quote (nord)))
@@ -21,14 +22,16 @@
     ("ccaaf462e6fe97801f712ea3cee7cbbc4208472fc75e008eab13276c17c87302" "4515feff287a98863b7b7f762197a78a7c2bfb6ec93879e7284dff184419268c" default)))
  '(package-selected-packages
    (quote
-    (preview-latex pdf-tools auctex-latexmk spaceline auctex magit helm-projectile eterm-256color ace-window better-defaults evil ##)))
+    (outline-magic preview-latex pdf-tools auctex-latexmk spaceline auctex magit helm-projectile eterm-256color ace-window better-defaults evil ##)))
+ '(pdf-occur-global-minor-mode t)
+ '(preview-default-option-list (quote ("displaymath" "floats" "graphics" "footnotes")))
  '(window-divider-default-right-width 10))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(preview-reference-face ((t nil))))
 
 ;; bigger initial size
 (add-to-list 'initial-frame-alist '(height . 48))
@@ -128,10 +131,15 @@
            #'TeX-revert-document-buffer)
 (global-font-lock-mode 1)
 (set-default 'preview-scale-function 3.0)
+(setq font-latex-fontify-script nil)
 
 (use-package auctex-latexmk
   :ensure t)
 (auctex-latexmk-setup)
+
+(use-package outline-magic
+  :ensure t)
+(define-key outline-minor-mode-map (kbd "<C-tab>") 'outline-cycle)
 
 (use-package spaceline
   :ensure t
@@ -143,3 +151,6 @@
   :config
   (spaceline-helm-mode 1)
   (spaceline-emacs-theme))
+
+(use-package org
+  :ensure t)
