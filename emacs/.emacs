@@ -22,7 +22,7 @@
     ("ccaaf462e6fe97801f712ea3cee7cbbc4208472fc75e008eab13276c17c87302" "4515feff287a98863b7b7f762197a78a7c2bfb6ec93879e7284dff184419268c" default)))
  '(package-selected-packages
    (quote
-    (outline-magic preview-latex pdf-tools auctex-latexmk spaceline auctex magit helm-projectile eterm-256color ace-window better-defaults evil ##)))
+    (ein pyvenv pyenv ob-ipython multi-term outline-magic preview-latex pdf-tools auctex-latexmk spaceline auctex magit helm-projectile eterm-256color ace-window better-defaults evil ##)))
  '(pdf-occur-global-minor-mode t)
  '(preview-default-option-list (quote ("displaymath" "floats" "graphics" "footnotes")))
  '(window-divider-default-right-width 10))
@@ -31,6 +31,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(org-document-title ((t (:foreground "#88C0D0" :weight bold :height 2.0 :width normal))))
  '(preview-reference-face ((t nil))))
 
 ;; bigger initial size
@@ -134,6 +135,10 @@
 (global-font-lock-mode 1)
 (set-default 'preview-scale-function 3.0)
 (setq font-latex-fontify-script nil)
+(add-hook 'LaTeX-mode-hook 'turn-on-reftex)
+(setq reftex-plug-into-AUCTeX t)
+(add-hook 'LaTeX-mode-hook 'outline-minor-mode)
+(add-hook 'LaTeX-mode-hook 'outline-hide-body)
 
 (use-package auctex-latexmk
   :ensure t)
@@ -141,6 +146,13 @@
 
 (use-package outline-magic
   :ensure t)
+;; extra outline headers 
+(setq TeX-outline-extra
+      '(("%chapter" 1)
+        ("%section" 2)
+        ("%subsection" 3)
+        ("%subsubsection" 4)
+        ("%paragraph" 5)))
 (define-key outline-minor-mode-map (kbd "<C-tab>") 'outline-cycle)
 
 (use-package spaceline
@@ -155,4 +167,30 @@
   (spaceline-emacs-theme))
 
 (use-package org
+  :ensure t)
+(setq org-image-actual-width 800)
+(setq org-confirm-babel-evaluate nil)
+
+(use-package ob-ipython
+  :ensure t)
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((ipython . t)
+   (ein . t)
+   ;; other languages..
+   ))
+
+(use-package multi-term
+  :ensure t)
+(setq multi-term-program "/bin/zsh")
+(setq multi-term-scroll-show-maximum-output 1)
+(add-hook 'term-mode-hook (lambda ()
+                            (define-key term-raw-map (kbd "M-o") 'ace-window)
+                            ))
+
+(use-package pyvenv
+  :ensure t)
+
+(use-package ein
   :ensure t)

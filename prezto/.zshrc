@@ -21,3 +21,8 @@ fi
 #
 export WORKON_HOME="~/.pythonenvs/"
 source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
+
+#
+# PATH
+#
+export PATH=$PATH:/snap/bin
