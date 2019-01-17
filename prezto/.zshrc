@@ -26,3 +26,9 @@ source /usr/share/virtualenvwrapper/virtualenvwrapper.sh
 # PATH
 #
 export PATH=$PATH:/snap/bin
+export PATH=$PATH:/usr/local/visit/bin
+
+#
+# sicc prompt customization b
+#
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=11'
