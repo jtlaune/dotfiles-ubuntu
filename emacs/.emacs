@@ -156,12 +156,25 @@
   '(progn
      ;; ensure that scrolling doesn't break on output
      (setq term-scroll-to-bottom-on-output t)))
+;; multiterm
+(use-package multi-term
+  :ensure t)
+(setq multi-term-program "/bin/zsh")
+(setq multi-term-scroll-show-maximum-output 1)
+(add-hook 'term-mode-hook (lambda ()
+                            (define-key term-raw-map (kbd "M-o") 'ace-window)
+                            ))
+
 
 ;; keybindings
 (global-set-key (kbd "M-o") 'ace-window)
 (global-set-key (kbd "M-r") 'isearch-backward-regexp)
 (global-set-key (kbd "M-s") 'isearch-forward-regexp)
 (global-set-key (kbd "M-l") 'linum-mode)
+(global-set-key (kbd "C-x g") 'magit-status)
+(global-set-key (kbd "C-c a") 'org-agenda)
+(global-set-key (kbd "C-c c") 'org-capture)
+(global-set-key (kbd "C-c s s") 'org-download-screenshot)
 
 ;; use-package
 (unless (package-installed-p 'use-package)
@@ -170,43 +183,46 @@
 (eval-when-compile
   (require 'use-package))
 
-;; packages
+;; evi
 (use-package evil
   :ensure t)
 (evil-mode t)
 (add-to-list 'evil-emacs-state-modes 'image-mode)
 
+;; ace-window
 (use-package ace-window
   :ensure t)
 
+;; colors
 (use-package eterm-256color
   :ensure t)
 
+;; helm
 (use-package helm
   :ensure t)
 (helm-mode 1)
 
-
+;; projectile 
 (use-package projectile
   :ensure t)
 (projectile-mode +1)
 (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-
 (use-package helm-projectile
   :ensure t)
 (setq projectile-completion-system 'helm)
 (helm-projectile-on)
 
+;; git
 (use-package magit
   :ensure t)
-(global-set-key (kbd "C-x g") 'magit-status)
 
+;; pdf
 (use-package pdf-tools
   :ensure t)
 (pdf-tools-install)
 (setq pdf-tools-enable 1)
 
-
+;; latex
 (use-package tex
   :ensure auctex)
 (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
@@ -232,9 +248,9 @@
   :ensure t)
 (auctex-latexmk-setup)
 
+;; outline-magic
 (use-package outline-magic
   :ensure t)
-;; extra outline headers 
 (setq TeX-outline-extra
       '(("%chapter" 1)
         ("%section" 2)
@@ -243,6 +259,7 @@
         ("%paragraph" 5)))
 (define-key outline-minor-mode-map (kbd "<C-tab>") 'outline-cycle)
 
+;; spaceline
 (use-package spaceline
   :ensure t
   :config
@@ -254,6 +271,7 @@
   (spaceline-helm-mode 1)
   (spaceline-spacemacs-theme))
 
+;; org
 (use-package org
   :ensure t)
 (setq org-image-actual-width 800)
@@ -264,26 +282,25 @@
 
 ;; agenda configuration
 (setq org-agenda-files
-      (list "~/org/todo.org"
-            "~/org/capture.org"))
+      (list "~/Dropbox/org/todo.org"))
 (setq org-refile-targets '((org-agenda-files :maxlevel . 2)))
 (setq org-use-fast-todo-selection 1)
 (setq org-capture-templates
       '(("h" "home" entry (file "~/Dropbox/org/todo.org")
-         "* HOME %?\n  %T\n")
+         "* HOME %?\n DEADLINE: %^t\n")
         ("w" "work" entry (file "~/Dropbox/org/todo.org")
-         "* WORK %?\n  %T\n")
+         "* WORK %?\n DEADLINE: %^t\n")
         ("s" "school" entry (file "~/Dropbox/org/todo.org")
-           "* SCHOOL %?\n  %T\n")))
-(global-set-key (kbd "C-c c") 'org-capture)
+           "* SCHL %?\n DEADLINE: %^t\n")))
 
+;; org-download
 (use-package org-download
   :ensure t)
 (setq org-download-screenshot-method "import /tmp/screenshot.png")
 (setq org-download-method 'attach)
 (setq org-download-annotate-function (lambda (_link) ""))
-(global-set-key (kbd "C-c s s") 'org-download-screenshot)
 
+;; python notebooks
 (use-package ob-ipython
   :ensure t)
 
@@ -294,21 +311,15 @@
    ;; other languages..
    ))
 (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
-
-(use-package multi-term
-  :ensure t)
-(setq multi-term-program "/bin/zsh")
-(setq multi-term-scroll-show-maximum-output 1)
-(add-hook 'term-mode-hook (lambda ()
-                            (define-key term-raw-map (kbd "M-o") 'ace-window)
-                            ))
-
 (use-package pyvenv
   :ensure t)
-
 (use-package ein
   :ensure t)
+(use-package virtualenvwrapper
+  :ensure t)
+(setq venv-location "~/.pythonenvs/")
 
+;; doom themes
 (use-package doom-themes
   :ensure t)
 (setq doom-one-brighter-comments t)
@@ -319,10 +330,7 @@
 (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
 (setq scroll-step 1) ;; keyboard scroll one line at a time
 
-(use-package virtualenvwrapper
-  :ensure t)
-(setq venv-location "~/.pythonenvs/")
-
+;; yasnippet
 (use-package yasnippet
   :ensure t)
 (yas-global-mode 1)
